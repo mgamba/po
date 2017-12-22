@@ -5,10 +5,14 @@ import db
 
 class Home:
     def on_get(self, req, resp):
-        header = ['Kung Foo Master','Style']
+        df = pd.read_sql_table('masters', con=db.engine, index_col='id')
 
-        df = pd.read_sql_query('select * from masters', con=db.engine)
-        html = df.to_html()
+        display_names = {
+            'name': 'Kung Foo Master',
+            'style': 'Style'
+        }
+        df.rename(columns=display_names, inplace=True)
+        html = df.to_html(index=False)
 
         resp.content_type = falcon.MEDIA_HTML
         resp.body = html
