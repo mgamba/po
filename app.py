@@ -17,5 +17,12 @@ class Home:
         resp.content_type = falcon.MEDIA_HTML
         resp.body = html
 
-api = falcon.API()
+api = falcon.App()
 api.add_route('/', Home())
+
+if __name__ == '__main__':
+    with make_server('0.0.0.0', 8000, api) as httpd:
+        print('Serving on port 8000...')
+
+        # Serve until process is killed
+        httpd.serve_forever()
